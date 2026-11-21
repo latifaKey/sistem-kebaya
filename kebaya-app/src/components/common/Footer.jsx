@@ -1,6 +1,6 @@
 import React from 'react';
 import { STUDIO_CONFIG } from '../../data/financialData';
-import { Phone, MapPin, Heart, Globe, Camera } from 'lucide-react';
+import { Phone, MapPin, Camera } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -93,11 +93,7 @@ export function Footer() {
         {/* Bottom copyright */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-4">
           <p>&copy; 2026 {STUDIO_CONFIG.name}. Seluruh Hak Cipta Dilindungi.</p>
-          <p className="flex items-center gap-1">
-            <span>Dibuat dengan</span>
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-current" />
-            <span>untuk Magang Pengembangan Sistem Kebaya Indonesia</span>
-          </p>
+          <p className="text-stone-500">Mojokerto &bull; Jawa Timur</p>
         </div>
       </div>
     </footer>
