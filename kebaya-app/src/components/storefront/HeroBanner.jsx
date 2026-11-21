@@ -18,7 +18,7 @@ export function HeroBanner({ onExploreCatalog, onOpenAppointment }) {
               <span>Bywazu Attire &bull; Persewaan Kebaya Modern Mojokerto</span>
             </div>
 
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-stone-900 leading-[1.15]">
+            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-stone-900 leading-[1.15]">
               Sewa Kebaya Modern, <br className="hidden sm:inline" />
               <span className="italic font-normal text-[#7A1C30]">Sempurna</span> di Hari Kelulusan & Lamaran.
             </h1>
@@ -47,18 +47,18 @@ export function HeroBanner({ onExploreCatalog, onOpenAppointment }) {
             </div>
 
             {/* Trust Badges matching Bywazu */}
-            <div className="pt-6 grid grid-cols-3 gap-4 border-t border-rose-200/60 max-w-lg mx-auto lg:mx-0 text-left">
+            <div className="pt-6 grid grid-cols-3 gap-2 sm:gap-4 border-t border-rose-200/60 max-w-lg mx-auto lg:mx-0 text-left">
               <div>
-                <p className="font-serif text-2xl font-bold text-[#7A1C30]">Free</p>
-                <p className="text-xs text-stone-500 font-medium">Resize Custom Ukuran</p>
+                <p className="font-serif text-xl sm:text-2xl font-bold text-[#7A1C30]">Free</p>
+                <p className="text-[10px] sm:text-xs text-stone-500 font-medium">Resize Custom Ukuran</p>
               </div>
               <div>
-                <p className="font-serif text-2xl font-bold text-[#7A1C30]">1-on-1</p>
-                <p className="text-xs text-stone-500 font-medium">Fitting Home Studio Mojokerto</p>
+                <p className="font-serif text-xl sm:text-2xl font-bold text-[#7A1C30]">1-on-1</p>
+                <p className="text-[10px] sm:text-xs text-stone-500 font-medium">Fitting Studio Mojokerto</p>
               </div>
               <div>
-                <p className="font-serif text-2xl font-bold text-[#7A1C30]">Free</p>
-                <p className="text-xs text-stone-500 font-medium">Laundry Terima Bersih</p>
+                <p className="font-serif text-xl sm:text-2xl font-bold text-[#7A1C30]">Free</p>
+                <p className="text-[10px] sm:text-xs text-stone-500 font-medium">Laundry Terima Bersih</p>
               </div>
             </div>
 

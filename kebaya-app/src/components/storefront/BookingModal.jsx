@@ -145,7 +145,7 @@ export function BookingModal({ kebaya, preselectedDate, onClose, onBookingSucces
         </button>
 
         {!isSubmitted ? (
-          <form onSubmit={handleSubmit} className="p-6 sm:p-8">
+          <form onSubmit={handleSubmit} className="p-4 sm:p-8">
             
             {/* Header */}
             <div className="border-b border-rose-100 pb-4 mb-6">

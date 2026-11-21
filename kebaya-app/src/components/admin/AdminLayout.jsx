@@ -25,8 +25,10 @@ import {
 import { STUDIO_CONFIG } from '../../data/financialData';
 
 export function AdminLayout({ activePage, setActivePage, onExitToClient, unpaidCount, children }) {
-  // Sidebar open/close state (Default open)
+  // Sidebar open/close state (Default open on desktop)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  // Mobile drawer open/close state
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   // Curated Luxury Color Themes for Sidebar (Soft, colored, not stark white & not muddy red)
   const [sidebarTheme, setSidebarTheme] = useState('dusty-rose');
@@ -130,211 +132,253 @@ export function AdminLayout({ activePage, setActivePage, onExitToClient, unpaidC
   const allItems = menuGroups.flatMap(g => g.items);
   const currentItem = allItems.find(m => m.id === activePage) || allItems[0];
 
+  const renderSidebarInner = (isExpanded, isMobile = false) => (
+    <>
+      <div>
+        
+        {/* Studio Brand Header */}
+        <div className={`p-4 border-b ${currentTheme.headerBg} flex items-center justify-between select-none`}>
+          <div className={`flex items-center ${isExpanded ? 'gap-3' : 'justify-center'} overflow-hidden w-full`}>
+            <img
+              src="/images/logo_bywazu.png"
+              alt="Bywazu Logo"
+              className="w-10 h-10 rounded-full object-cover ring-1 ring-stone-200/80 shadow-2xs flex-shrink-0 bg-[#F4F0EB]"
+            />
+            {isExpanded && (
+              <div className="min-w-0 flex-1">
+                <span className={`font-serif text-lg font-bold tracking-wider ${currentTheme.textColor} truncate block leading-tight`}>
+                  Bywazu Attire
+                </span>
+                <p className="text-[9px] tracking-widest uppercase text-[#7A1C30] font-bold truncate mt-0.5">
+                  Studio Management &bull; Mojokerto
+                </p>
+              </div>
+            )}
+            {isMobile && (
+              <button
+                onClick={() => setIsMobileDrawerOpen(false)}
+                className="p-1.5 rounded-lg text-stone-600 hover:text-stone-900 hover:bg-black/5"
+                title="Tutup Menu"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Navigation Links Grouped by Business Function */}
+        <nav className={`p-2.5 ${isExpanded ? 'space-y-3' : 'space-y-2'}`}>
+          {menuGroups.map((group) => (
+            <div key={group.category} className="space-y-0.5">
+              
+              {/* Category Header */}
+              {isExpanded ? (
+                <div className="px-3 pt-1.5 pb-1 flex items-center gap-2 select-none">
+                  <span className={`text-[9px] font-bold tracking-[0.2em] uppercase ${currentTheme.categoryColor}`}>
+                    {group.category}
+                  </span>
+                  <div className={`h-px flex-1 ${currentTheme.dividerColor}`} />
+                </div>
+              ) : (
+                <div className="py-1 px-0.5 flex flex-col items-center select-none">
+                  <span className={`text-[8px] font-bold ${currentTheme.categoryColor} uppercase truncate px-0.5 text-center block tracking-tight`}>
+                    {group.category.slice(0, 4)}
+                  </span>
+                  <div className={`w-5 h-px ${currentTheme.dividerColor} mt-0.5`} />
+                </div>
+              )}
+
+              {/* Group Items */}
+              {group.items.map((item) => {
+                const Icon = item.icon;
+                const isActive = activePage === item.id;
+
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setActivePage(item.id);
+                      if (isMobile) setIsMobileDrawerOpen(false);
+                    }}
+                    title={!isExpanded ? item.label : undefined}
+                    className={`w-full flex items-center ${
+                      isExpanded ? 'justify-between px-3.5 py-2.5' : 'justify-center p-2.5'
+                    } rounded-xl text-xs font-medium transition-all relative cursor-pointer group ${
+                      isActive
+                        ? currentTheme.activeBtn
+                        : currentTheme.inactiveText
+                    }`}
+                  >
+                    <div className={`flex items-center ${isExpanded ? 'gap-2.5 min-w-0' : 'justify-center'}`}>
+                      <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-white' : 'opacity-70 group-hover:opacity-100'}`} />
+                      {isExpanded && <span className="truncate">{item.label}</span>}
+                    </div>
+
+                    {/* Notification Badges (Expanded) */}
+                    {isExpanded && item.badge > 0 && (
+                      <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full flex-shrink-0 ${
+                        isActive ? currentTheme.badgeActive : currentTheme.badgeInactive
+                      }`}>
+                        {item.badge}
+                      </span>
+                    )}
+
+                    {/* Collapsed dot badge (Icon Rail) */}
+                    {!isExpanded && item.badge > 0 && (
+                      <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#7A1C30] ring-2 ring-white" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </nav>
+
+      </div>
+
+      {/* User Profile & Return to Public Website (Bottom) */}
+      <div className={`p-3.5 border-t ${currentTheme.bottomBg} ${isExpanded ? '' : 'flex flex-col items-center'}`}>
+        {isExpanded ? (
+          <>
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <p className={`text-xs font-bold ${currentTheme.textColor}`}>Admin / Owner</p>
+                <p className="text-[10px] opacity-75 font-medium">Studio Mojokerto</p>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20" title="Sistem Aktif & Terhubung" />
+                <span className="text-[10px] font-semibold text-emerald-600">Online</span>
+              </div>
+            </div>
+
+            {/* Palette Color Switcher: 3 curated luxury options */}
+            <div className="flex items-center justify-between py-2 border-t border-black/10 my-1.5">
+              <span className="text-[10px] font-semibold opacity-70">Warna Tema:</span>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setSidebarTheme('dusty-rose')}
+                  title="Dusty Rose Silk (Lembut & Anggun)"
+                  className={`w-4 h-4 rounded-full bg-[#EDE1E4] border-2 transition-transform cursor-pointer ${
+                    sidebarTheme === 'dusty-rose' ? 'border-[#7A1C30] scale-125 shadow-xs' : 'border-stone-400/60'
+                  }`}
+                />
+                <button
+                  onClick={() => setSidebarTheme('espresso')}
+                  title="Velvet Espresso (Mewah Teduh)"
+                  className={`w-4 h-4 rounded-full bg-[#221B1E] border-2 transition-transform cursor-pointer ${
+                    sidebarTheme === 'espresso' ? 'border-[#8F233B] scale-125 shadow-xs' : 'border-stone-400/60'
+                  }`}
+                />
+                <button
+                  onClick={() => setSidebarTheme('cashmere')}
+                  title="Warm Cashmere (Hangat Natural)"
+                  className={`w-4 h-4 rounded-full bg-[#EFE7E0] border-2 transition-transform cursor-pointer ${
+                    sidebarTheme === 'cashmere' ? 'border-[#7A1C30] scale-125 shadow-xs' : 'border-stone-400/60'
+                  }`}
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                onExitToClient();
+                if (isMobile) setIsMobileDrawerOpen(false);
+              }}
+              className="w-full mt-1 py-2 px-3 rounded-xl bg-white/90 hover:bg-white text-stone-700 hover:text-[#7A1C30] border border-stone-200/80 text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-2xs cursor-pointer group"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-stone-500 group-hover:text-[#7A1C30]" />
+              <span>Lihat Website Publik</span>
+            </button>
+          </>
+        ) : (
+          <div className="flex flex-col items-center gap-2 py-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white shadow-xs mb-1" title="Sistem Aktif & Terhubung" />
+            <button
+              onClick={() => {
+                onExitToClient();
+                if (isMobile) setIsMobileDrawerOpen(false);
+              }}
+              title="Lihat Website Publik"
+              className="p-2 rounded-xl bg-white/90 hover:bg-white text-stone-700 hover:text-[#7A1C30] transition-colors cursor-pointer shadow-2xs"
+            >
+              <ExternalLink className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+
   return (
     <div className="min-h-screen bg-[#FDFBF9] flex">
       
-      {/* Luxury Colored Sidebar - Soft Dusty Rose Silk by default (not stark white & not muddy red) */}
+      {/* Mobile Drawer Overlay Backdrop */}
+      {isMobileDrawerOpen && (
+        <div 
+          onClick={() => setIsMobileDrawerOpen(false)}
+          className="fixed inset-0 bg-stone-900/60 backdrop-blur-xs z-40 lg:hidden animate-fadeIn"
+        />
+      )}
+
+      {/* Mobile Off-Canvas Drawer */}
+      <aside 
+        className={`fixed inset-y-0 left-0 z-50 w-72 ${currentTheme.asideBg} ${currentTheme.textColor} flex lg:hidden flex-col justify-between shadow-2xl border-r overflow-y-auto transition-transform duration-300 ease-in-out ${
+          isMobileDrawerOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {renderSidebarInner(true, true)}
+      </aside>
+
+      {/* Desktop Sticky Collapsible Sidebar */}
       <aside 
         className={`${
           isSidebarOpen ? 'w-64' : 'w-16'
-        } ${currentTheme.asideBg} ${currentTheme.textColor} flex flex-col justify-between flex-shrink-0 shadow-sm border-r sticky top-0 h-screen overflow-y-auto transition-all duration-300 z-40`}
+        } ${currentTheme.asideBg} ${currentTheme.textColor} hidden lg:flex flex-col justify-between flex-shrink-0 shadow-sm border-r sticky top-0 h-screen overflow-y-auto transition-all duration-300 z-30`}
       >
-        <div>
-          
-          {/* Studio Brand Header */}
-          <div className={`p-4 border-b ${currentTheme.headerBg} flex items-center justify-center select-none`}>
-            <div className={`flex items-center ${isSidebarOpen ? 'gap-3' : 'justify-center'} overflow-hidden w-full`}>
-              <img
-                src="/images/logo_bywazu.png"
-                alt="Bywazu Logo"
-                className="w-10 h-10 rounded-full object-cover ring-1 ring-stone-200/80 shadow-2xs flex-shrink-0 bg-[#F4F0EB]"
-              />
-              {isSidebarOpen && (
-                <div className="min-w-0">
-                  <span className={`font-serif text-lg font-bold tracking-wider ${currentTheme.textColor} truncate block leading-tight`}>
-                    Bywazu Attire
-                  </span>
-                  <p className="text-[9px] tracking-widest uppercase text-[#7A1C30] font-bold truncate mt-0.5">
-                    Studio Management &bull; Mojokerto
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Navigation Links Grouped by Business Function */}
-          <nav className={`p-2.5 ${isSidebarOpen ? 'space-y-3' : 'space-y-2'}`}>
-            {menuGroups.map((group) => (
-              <div key={group.category} className="space-y-0.5">
-                
-                {/* Category Header */}
-                {isSidebarOpen ? (
-                  <div className="px-3 pt-1.5 pb-1 flex items-center gap-2 select-none">
-                    <span className={`text-[9px] font-bold tracking-[0.2em] uppercase ${currentTheme.categoryColor}`}>
-                      {group.category}
-                    </span>
-                    <div className={`h-px flex-1 ${currentTheme.dividerColor}`} />
-                  </div>
-                ) : (
-                  <div className="py-1 px-0.5 flex flex-col items-center select-none">
-                    <span className={`text-[8px] font-bold ${currentTheme.categoryColor} uppercase truncate px-0.5 text-center block tracking-tight`}>
-                      {group.category.slice(0, 4)}
-                    </span>
-                    <div className={`w-5 h-px ${currentTheme.dividerColor} mt-0.5`} />
-                  </div>
-                )}
-
-                {/* Group Items */}
-                {group.items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = activePage === item.id;
-
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => setActivePage(item.id)}
-                      title={!isSidebarOpen ? item.label : undefined}
-                      className={`w-full flex items-center ${
-                        isSidebarOpen ? 'justify-between px-3.5 py-2.5' : 'justify-center p-2.5'
-                      } rounded-xl text-xs font-medium transition-all relative cursor-pointer group ${
-                        isActive
-                          ? currentTheme.activeBtn
-                          : currentTheme.inactiveText
-                      }`}
-                    >
-                      <div className={`flex items-center ${isSidebarOpen ? 'gap-2.5 min-w-0' : 'justify-center'}`}>
-                        <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-white' : 'opacity-70 group-hover:opacity-100'}`} />
-                        {isSidebarOpen && <span className="truncate">{item.label}</span>}
-                      </div>
-
-                      {/* Notification Badges (Expanded) */}
-                      {isSidebarOpen && item.badge > 0 && (
-                        <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full flex-shrink-0 ${
-                          isActive ? currentTheme.badgeActive : currentTheme.badgeInactive
-                        }`}>
-                          {item.badge}
-                        </span>
-                      )}
-
-                      {/* Collapsed dot badge (Icon Rail) */}
-                      {!isSidebarOpen && item.badge > 0 && (
-                        <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#7A1C30] ring-2 ring-white" />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            ))}
-          </nav>
-
-        </div>
-
-        {/* User Profile & Return to Public Website (Bottom) */}
-        <div className={`p-3.5 border-t ${currentTheme.bottomBg} ${isSidebarOpen ? '' : 'flex flex-col items-center'}`}>
-          {isSidebarOpen ? (
-            <>
-              <div className="flex items-center justify-between mb-2">
-                <div>
-                  <p className={`text-xs font-bold ${currentTheme.textColor}`}>Admin / Owner</p>
-                  <p className="text-[10px] opacity-75 font-medium">Studio Mojokerto</p>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20" title="Sistem Aktif & Terhubung" />
-                  <span className="text-[10px] font-semibold text-emerald-600">Online</span>
-                </div>
-              </div>
-
-              {/* Palette Color Switcher: 3 curated luxury options */}
-              <div className="flex items-center justify-between py-2 border-t border-black/10 my-1.5">
-                <span className="text-[10px] font-semibold opacity-70">Warna Tema:</span>
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={() => setSidebarTheme('dusty-rose')}
-                    title="Dusty Rose Silk (Lembut & Anggun)"
-                    className={`w-4 h-4 rounded-full bg-[#EDE1E4] border-2 transition-transform cursor-pointer ${
-                      sidebarTheme === 'dusty-rose' ? 'border-[#7A1C30] scale-125 shadow-xs' : 'border-stone-400/60'
-                    }`}
-                  />
-                  <button
-                    onClick={() => setSidebarTheme('espresso')}
-                    title="Velvet Espresso (Mewah Teduh)"
-                    className={`w-4 h-4 rounded-full bg-[#221B1E] border-2 transition-transform cursor-pointer ${
-                      sidebarTheme === 'espresso' ? 'border-[#8F233B] scale-125 shadow-xs' : 'border-stone-400/60'
-                    }`}
-                  />
-                  <button
-                    onClick={() => setSidebarTheme('cashmere')}
-                    title="Warm Cashmere (Hangat Natural)"
-                    className={`w-4 h-4 rounded-full bg-[#EFE7E0] border-2 transition-transform cursor-pointer ${
-                      sidebarTheme === 'cashmere' ? 'border-[#7A1C30] scale-125 shadow-xs' : 'border-stone-400/60'
-                    }`}
-                  />
-                </div>
-              </div>
-
-              <button
-                onClick={onExitToClient}
-                className="w-full mt-1 py-2 px-3 rounded-xl bg-white/90 hover:bg-white text-stone-700 hover:text-[#7A1C30] border border-stone-200/80 text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-2xs cursor-pointer group"
-              >
-                <ExternalLink className="w-3.5 h-3.5 text-stone-500 group-hover:text-[#7A1C30]" />
-                <span>Lihat Website Publik</span>
-              </button>
-            </>
-          ) : (
-            <div className="flex flex-col items-center gap-2 py-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white shadow-xs mb-1" title="Sistem Aktif & Terhubung" />
-              <button
-                onClick={onExitToClient}
-                title="Lihat Website Publik"
-                className="p-2 rounded-xl bg-white/90 hover:bg-white text-stone-700 hover:text-[#7A1C30] transition-colors cursor-pointer shadow-2xs"
-              >
-                <ExternalLink className="w-4 h-4" />
-              </button>
-            </div>
-          )}
-        </div>
-
+        {renderSidebarInner(isSidebarOpen, false)}
       </aside>
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto transition-all duration-300">
         
         {/* Top Control Bar of Admin Area */}
-        <header className="h-16 bg-white/95 backdrop-blur-md border-b border-stone-200/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-2xs">
-          <div className="flex items-center gap-3">
+        <header className="h-16 bg-white/95 backdrop-blur-md border-b border-stone-200/80 px-3 sm:px-8 flex items-center justify-between sticky top-0 z-20 shadow-2xs">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             
             {/* The Sidebar Toggle Icon Button (PanelLeftClose / PanelLeftOpen) */}
             <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-2 rounded-xl text-stone-700 hover:bg-stone-100 hover:text-stone-900 transition-colors cursor-pointer flex items-center justify-center border border-stone-200/60 shadow-2xs"
-              title={isSidebarOpen ? "Sembunyikan Sidebar" : "Tampilkan Sidebar"}
+              onClick={() => {
+                if (window.innerWidth < 1024) {
+                  setIsMobileDrawerOpen(prev => !prev);
+                } else {
+                  setIsSidebarOpen(prev => !prev);
+                }
+              }}
+              className="p-2 rounded-xl text-stone-700 hover:bg-stone-100 hover:text-stone-900 transition-colors cursor-pointer flex items-center justify-center border border-stone-200/60 shadow-2xs flex-shrink-0"
+              title="Toggle Menu Sidebar"
             >
-              {isSidebarOpen ? (
-                <PanelLeftClose className="w-5 h-5 text-stone-700" />
-              ) : (
-                <PanelLeftOpen className="w-5 h-5 text-stone-700" />
-              )}
+              <PanelLeftClose className="w-5 h-5 text-stone-700" />
             </button>
 
             <div className="h-4 w-px bg-stone-200 hidden sm:block" />
 
             {/* Breadcrumb / Title */}
-            <div className="flex items-center gap-2 text-xs">
-              <span className="font-serif font-bold text-stone-900 text-sm">
+            <div className="flex items-center gap-1.5 sm:gap-2 text-xs min-w-0 truncate">
+              <span className="font-serif font-bold text-stone-900 text-sm truncate">
                 {currentItem.label}
               </span>
-              <span className="text-stone-400">&bull;</span>
-              <span className="text-stone-500 font-medium text-[11px] hidden sm:inline">
+              <span className="text-stone-400 hidden sm:inline">&bull;</span>
+              <span className="text-stone-500 font-medium text-[11px] hidden md:inline truncate">
                 Bywazu Studio Management Mojokerto
               </span>
             </div>
           </div>
 
           {/* Quick Exit to Public Website Button */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <button
               onClick={onExitToClient}
-              className="btn-glass px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#7A1C30] hover:bg-rose-50 flex items-center gap-1.5 border border-stone-200 shadow-2xs transition-all cursor-pointer"
+              className="btn-glass px-3 py-1.5 rounded-full text-xs font-semibold text-[#7A1C30] hover:bg-rose-50 flex items-center gap-1.5 border border-stone-200 shadow-2xs transition-all cursor-pointer"
             >
               <ExternalLink className="w-3.5 h-3.5 text-[#7A1C30]" />
               <span className="hidden sm:inline">Lihat Website Publik</span>

@@ -84,7 +84,7 @@ export function ProductDetailModal({ kebaya, onClose, onOpenBooking, onOpenAppoi
         </button>
 
         {/* Modal Content */}
-        <div className="p-6 sm:p-8">
+        <div className="p-4 sm:p-8">
           
           {/* Back link */}
           <button
