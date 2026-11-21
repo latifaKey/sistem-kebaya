@@ -1,0 +1,10 @@
+{
+  "name": "sistem-kebaya-root",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm --prefix kebaya-app run dev",
+    "build": "npm --prefix kebaya-app run build",
+    "preview": "npm --prefix kebaya-app run preview"
+  }
+}

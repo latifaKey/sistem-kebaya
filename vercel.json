@@ -1,0 +1,10 @@
+{
+  "buildCommand": "npm --prefix kebaya-app run build",
+  "outputDirectory": "kebaya-app/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

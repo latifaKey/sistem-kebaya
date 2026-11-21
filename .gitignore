@@ -1,0 +1,10 @@
+node_modules
+kebaya-app/node_modules
+kebaya-app/dist
+.vercel
+dist
+*.log
+.DS_Store
+web-kebaya.mp4
+frames/
+frames_detailed/
