@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Menu, X, ArrowUpRight } from 'lucide-react';
+import { ShieldCheck, Menu, X } from 'lucide-react';
 import { STUDIO_CONFIG } from '../../data/financialData';
 
 export function Navbar({ activeTab, setActiveTab, currentMode, setCurrentMode }) {
@@ -73,30 +73,18 @@ export function Navbar({ activeTab, setActiveTab, currentMode, setCurrentMode })
             </nav>
           )}
 
-          {/* Right Area - Obvious Studio Admin Switch & Consultation */}
+          {/* Right Area - Obvious Studio Admin Switch */}
           <div className="flex items-center space-x-2.5 sm:space-x-3">
             
             {/* Clear & Obvious Studio Admin Button */}
             <button
               onClick={() => setCurrentMode('admin')}
-              className="btn-glass px-3.5 py-2 rounded-full text-xs font-semibold text-stone-700 hover:text-[#7A1C30] flex items-center gap-1.5 border border-stone-200/90 shadow-2xs hover:shadow-xs transition-all cursor-pointer group"
+              className="btn-glass px-4 py-2 rounded-full text-xs font-semibold text-stone-700 hover:text-[#7A1C30] flex items-center gap-1.5 border border-stone-200/90 shadow-2xs hover:shadow-xs transition-all cursor-pointer group"
               title="Beralih ke Dashboard Web Admin Studio"
             >
               <ShieldCheck className="w-4 h-4 text-[#7A1C30] group-hover:scale-110 transition-transform" />
               <span>Studio Admin</span>
             </button>
-
-            {currentMode === 'client' && (
-              <a
-                href={`https://api.whatsapp.com/send?phone=${STUDIO_CONFIG.whatsappNumber}&text=Halo%20Admin%20Bywazu%20Attire,%20saya%20ingin%20konsultasi%20sewa%20kebaya`}
-                target="_blank"
-                rel="noreferrer"
-                className="hidden sm:inline-flex btn-glass-primary px-4 py-2 rounded-full text-xs font-semibold shadow-xs items-center gap-1.5 hover:shadow-md transition-all cursor-pointer"
-              >
-                <span>Konsultasi Studio</span>
-                <ArrowUpRight className="w-3.5 h-3.5 opacity-70" />
-              </a>
-            )}
 
             {/* Mobile Hamburger Toggle */}
             {currentMode === 'client' && (
@@ -159,16 +147,6 @@ export function Navbar({ activeTab, setActiveTab, currentMode, setCurrentMode })
               <ShieldCheck className="w-4 h-4 text-[#7A1C30]" />
               <span>Buka Dashboard Studio Admin</span>
             </button>
-
-            <a
-              href={`https://api.whatsapp.com/send?phone=${STUDIO_CONFIG.whatsappNumber}&text=Halo%20Admin%20Bywazu%20Attire,%20saya%20ingin%20konsultasi%20sewa%20kebaya`}
-              target="_blank"
-              rel="noreferrer"
-              className="w-full btn-glass-primary py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5"
-            >
-              <span>Konsultasi Studio via WhatsApp</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
           </div>
         </div>
       )}
