@@ -133,3 +133,7 @@ Sistem ini mengintegrasikan dua pilar utama dalam satu aplikasi terpadu:
 - **Optimasi Performa & Ukuran Bundle:**
   - Ukuran bundle JavaScript produksi terpangkas drastis lebih dari **55%** (dari **1.024 kB** menjadi hanya **431 kB**).
   - Waktu muat (*load time*) website menjadi jauh lebih instan, ringan, dan ramah kuota serta baterai perangkat pelanggan.
+- **Penyempurnaan Responsivitas Mobile Penuh (Mobile-Friendly):**
+  - Penerapan sistem drawer off-canvas geser pada sidebar admin untuk layar ponsel cerdas (*smartphone*) dengan backdrop gelap dan tombol tutup instan.
+  - Penyesuaian ukuran tipografi hero, grid kalender, form padding modal pemesanan, dan tabel data agar pas di layar kecil tanpa horizontal overflow.
+  - Penghapusan tombol WA ganda pada header dan pembersihan teks watermark magang di footer copyright.
